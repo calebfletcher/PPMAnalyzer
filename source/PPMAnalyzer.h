@@ -1,16 +1,16 @@
-#ifndef SIMPLESERIAL_ANALYZER_H
-#define SIMPLESERIAL_ANALYZER_H
+#ifndef PPM_ANALYZER_H
+#define PPM_ANALYZER_H
 
 #include <Analyzer.h>
-#include "SimpleSerialAnalyzerResults.h"
-#include "SimpleSerialSimulationDataGenerator.h"
+#include "PPMAnalyzerResults.h"
+#include "PPMSimulationDataGenerator.h"
 
-class SimpleSerialAnalyzerSettings;
-class ANALYZER_EXPORT SimpleSerialAnalyzer : public Analyzer2
+class PPMAnalyzerSettings;
+class ANALYZER_EXPORT PPMAnalyzer : public Analyzer2
 {
 public:
-	SimpleSerialAnalyzer();
-	virtual ~SimpleSerialAnalyzer();
+	PPMAnalyzer();
+	virtual ~PPMAnalyzer();
 
 	virtual void SetupResults();
 	virtual void WorkerThread();
@@ -22,11 +22,11 @@ public:
 	virtual bool NeedsRerun();
 
 protected: //vars
-	std::auto_ptr< SimpleSerialAnalyzerSettings > mSettings;
-	std::auto_ptr< SimpleSerialAnalyzerResults > mResults;
+	std::auto_ptr< PPMAnalyzerSettings > mSettings;
+	std::auto_ptr< PPMAnalyzerResults > mResults;
 	AnalyzerChannelData* mSerial;
 
-	SimpleSerialSimulationDataGenerator mSimulationDataGenerator;
+	PPMSimulationDataGenerator mSimulationDataGenerator;
 	bool mSimulationInitilized;
 
 	//Serial analysis vars:
@@ -39,4 +39,4 @@ extern "C" ANALYZER_EXPORT const char* __cdecl GetAnalyzerName();
 extern "C" ANALYZER_EXPORT Analyzer* __cdecl CreateAnalyzer( );
 extern "C" ANALYZER_EXPORT void __cdecl DestroyAnalyzer( Analyzer* analyzer );
 
-#endif //SIMPLESERIAL_ANALYZER_H
+#endif //PPM_ANALYZER_H
