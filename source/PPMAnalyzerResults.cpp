@@ -22,23 +22,37 @@ void PPMAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, D
 	Frame frame = GetFrame(frame_index);
 	FrameType frame_type = (FrameType)frame.mType;
 
-	char number_str[128];
+	U32 sample_rate = mAnalyzer->GetSampleRate();
+
+	char number_str_1[128];
+	char number_str_2[128];
+	double pulse_duration;
+	double value;
 	//AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
 
 	switch (frame_type)
 	{
 	case FrameType::Sync:
-		strcpy(number_str, "Sync");
+		sprintf(number_str_1, "Sync");
+		AddResultString(number_str_1);
+		AddResultString("S");
 		break;
 	case FrameType::Channel:
-		strcpy(number_str, "Channel");
+		pulse_duration = static_cast<double>(frame.mData1) / static_cast<double>(mAnalyzer->GetSampleRate());
+		value = (pulse_duration - 0.0005) * 100000.0;
+
+		sprintf(number_str_1, "Channel %llu: %.1f%%", frame.mData2, value);
+		AddResultString(number_str_1);
+		sprintf(number_str_2, "%.1f%%", value);
+		AddResultString(number_str_2);
+		AddResultString("C");
 		break;
 	default:
-		strcpy(number_str, "Unknown");
+		strcpy(number_str_1, "Unknown");
+		AddResultString(number_str_1);
+		AddResultString("U");
 		break;
 	}
-
-	AddResultString(number_str);
 }
 
 void PPMAnalyzerResults::GenerateExportFile(const char* file, DisplayBase display_base, U32 export_type_user_id)
