@@ -17,11 +17,13 @@ public:
 
 	
 	Channel mInputChannel;
-	U32 mBitRate;
+	U32 mFrequency;
+	U32 mSyncTimePercentage;
 
 protected:
 	std::auto_ptr< AnalyzerSettingInterfaceChannel >	mInputChannelInterface;
-	std::auto_ptr< AnalyzerSettingInterfaceInteger >	mBitRateInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceInteger >	mFrequencyInterface;
+	std::auto_ptr< AnalyzerSettingInterfaceInteger >	mSyncTimePercentageInterface;
 };
 
 #endif //PPM_ANALYZER_SETTINGS

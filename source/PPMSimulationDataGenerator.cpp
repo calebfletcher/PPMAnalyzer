@@ -38,7 +38,7 @@ U32 PPMSimulationDataGenerator::GenerateSimulationData( U64 largest_sample_reque
 
 void PPMSimulationDataGenerator::CreateSerialByte()
 {
-	U32 samples_per_bit = mSimulationSampleRateHz / mSettings->mBitRate;
+	U32 samples_per_bit = mSimulationSampleRateHz / 9600;
 
 	U8 byte = mSerialText[ mStringIndex ];
 	mStringIndex++;

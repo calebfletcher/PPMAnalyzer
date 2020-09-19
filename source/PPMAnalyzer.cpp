@@ -31,8 +31,8 @@ void PPMAnalyzer::WorkerThread()
 	if( mSerial->GetBitState() == BIT_LOW )
 		mSerial->AdvanceToNextEdge();
 
-	U32 samples_per_bit = mSampleRateHz / mSettings->mBitRate;
-	U32 samples_to_first_center_of_first_data_bit = U32( 1.5 * double( mSampleRateHz ) / double( mSettings->mBitRate ) );
+	U32 samples_per_bit = mSampleRateHz / 9600;
+	U32 samples_to_first_center_of_first_data_bit = U32( 1.5 * double( mSampleRateHz ) / double( 9600 ) );
 
 	for( ; ; )
 	{
@@ -90,7 +90,7 @@ U32 PPMAnalyzer::GenerateSimulationData( U64 minimum_sample_index, U32 device_sa
 
 U32 PPMAnalyzer::GetMinimumSampleRateHz()
 {
-	return mSettings->mBitRate * 4;
+	return 9600 * 4;
 }
 
 const char* PPMAnalyzer::GetAnalyzerName() const
