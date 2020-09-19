@@ -5,10 +5,10 @@
 #include <iostream>
 #include <fstream>
 
-PPMAnalyzerResults::PPMAnalyzerResults( PPMAnalyzer* analyzer, PPMAnalyzerSettings* settings )
-:	AnalyzerResults(),
-	mSettings( settings ),
-	mAnalyzer( analyzer )
+PPMAnalyzerResults::PPMAnalyzerResults(PPMAnalyzer* analyzer, PPMAnalyzerSettings* settings)
+	: AnalyzerResults(),
+	mSettings(settings),
+	mAnalyzer(analyzer)
 {
 }
 
@@ -16,19 +16,34 @@ PPMAnalyzerResults::~PPMAnalyzerResults()
 {
 }
 
-void PPMAnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& channel, DisplayBase display_base )
+void PPMAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, DisplayBase display_base)
 {
 	ClearResultStrings();
-	Frame frame = GetFrame( frame_index );
+	Frame frame = GetFrame(frame_index);
+	FrameType frame_type = (FrameType)frame.mType;
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
-	AddResultString( number_str );
+	//AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+
+	switch (frame_type)
+	{
+	case FrameType::Sync:
+		strcpy(number_str, "Sync");
+		break;
+	case FrameType::Channel:
+		strcpy(number_str, "Channel");
+		break;
+	default:
+		strcpy(number_str, "Unknown");
+		break;
+	}
+
+	AddResultString(number_str);
 }
 
-void PPMAnalyzerResults::GenerateExportFile( const char* file, DisplayBase display_base, U32 export_type_user_id )
+void PPMAnalyzerResults::GenerateExportFile(const char* file, DisplayBase display_base, U32 export_type_user_id)
 {
-	std::ofstream file_stream( file, std::ios::out );
+	std::ofstream file_stream(file, std::ios::out);
 
 	U64 trigger_sample = mAnalyzer->GetTriggerSample();
 	U32 sample_rate = mAnalyzer->GetSampleRate();
@@ -36,19 +51,19 @@ void PPMAnalyzerResults::GenerateExportFile( const char* file, DisplayBase displ
 	file_stream << "Time [s],Value" << std::endl;
 
 	U64 num_frames = GetNumFrames();
-	for( U32 i=0; i < num_frames; i++ )
+	for (U32 i = 0; i < num_frames; i++)
 	{
-		Frame frame = GetFrame( i );
-		
+		Frame frame = GetFrame(i);
+
 		char time_str[128];
-		AnalyzerHelpers::GetTimeString( frame.mStartingSampleInclusive, trigger_sample, sample_rate, time_str, 128 );
+		AnalyzerHelpers::GetTimeString(frame.mStartingSampleInclusive, trigger_sample, sample_rate, time_str, 128);
 
 		char number_str[128];
-		AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+		AnalyzerHelpers::GetNumberString(frame.mData1, display_base, 8, number_str, 128);
 
 		file_stream << time_str << "," << number_str << std::endl;
 
-		if( UpdateExportProgressAndCheckForCancel( i, num_frames ) == true )
+		if (UpdateExportProgressAndCheckForCancel(i, num_frames) == true)
 		{
 			file_stream.close();
 			return;
@@ -58,25 +73,25 @@ void PPMAnalyzerResults::GenerateExportFile( const char* file, DisplayBase displ
 	file_stream.close();
 }
 
-void PPMAnalyzerResults::GenerateFrameTabularText( U64 frame_index, DisplayBase display_base )
+void PPMAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase display_base)
 {
 #ifdef SUPPORTS_PROTOCOL_SEARCH
-	Frame frame = GetFrame( frame_index );
+	Frame frame = GetFrame(frame_index);
 	ClearTabularText();
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
-	AddTabularText( number_str );
+	AnalyzerHelpers::GetNumberString(frame.mData1, display_base, 8, number_str, 128);
+	AddTabularText(number_str);
 #endif
 }
 
-void PPMAnalyzerResults::GeneratePacketTabularText( U64 packet_id, DisplayBase display_base )
+void PPMAnalyzerResults::GeneratePacketTabularText(U64 packet_id, DisplayBase display_base)
 {
 	//not supported
 
 }
 
-void PPMAnalyzerResults::GenerateTransactionTabularText( U64 transaction_id, DisplayBase display_base )
+void PPMAnalyzerResults::GenerateTransactionTabularText(U64 transaction_id, DisplayBase display_base)
 {
 	//not supported
 }

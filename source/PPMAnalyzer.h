@@ -5,6 +5,11 @@
 #include "PPMAnalyzerResults.h"
 #include "PPMSimulationDataGenerator.h"
 
+enum class FrameType {
+	Sync,
+	Channel
+};
+
 class PPMAnalyzerSettings;
 class ANALYZER_EXPORT PPMAnalyzer : public Analyzer2
 {
